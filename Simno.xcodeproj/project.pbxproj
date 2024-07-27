@@ -66,8 +66,6 @@
 				8B1439932C54FC1700B7C6FF /* AppDelegate.swift */,
 				8B1439952C54FC1700B7C6FF /* SceneDelegate.swift */,
 				8B1439AA2C55084E00B7C6FF /* Scenes */,
-				8B14399C2C54FC1A00B7C6FF /* Assets.xcassets */,
-				8B14399E2C54FC1A00B7C6FF /* LaunchScreen.storyboard */,
 				8B1439A12C54FC1A00B7C6FF /* Info.plist */,
 			);
 			path = Simno;
@@ -76,6 +74,8 @@
 		8B1439A72C55034C00B7C6FF /* Helpers + Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				8B14399C2C54FC1A00B7C6FF /* Assets.xcassets */,
+				8B14399E2C54FC1A00B7C6FF /* LaunchScreen.storyboard */,
 				8B1439A82C55036000B7C6FF /* Colors.swift */,
 			);
 			path = "Helpers + Extensions";

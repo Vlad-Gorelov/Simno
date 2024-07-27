@@ -28,10 +28,8 @@ class NoteCollectionViewCell: UICollectionViewCell {
     private func setupViews() {
         contentView.backgroundColor = .snBackgroundCell
         contentView.layer.cornerRadius = 10
-        contentView.layer.borderWidth = 1
+        contentView.layer.borderWidth = 1 
         contentView.layer.borderColor = UIColor.snCellBorder.cgColor
-
-        colorView.layer.cornerRadius = 8
         colorView.backgroundColor = .green
         contentView.addSubview(colorView)
 
@@ -54,6 +52,20 @@ class NoteCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(actionIcon)
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setColorViewCorners()
+    }
+
+    private func setColorViewCorners() {
+        let maskPath = UIBezierPath(roundedRect: colorView.bounds,
+                                    byRoundingCorners: [.topLeft, .bottomLeft],
+                                    cornerRadii: CGSize(width: 10, height: 10))
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = maskPath.cgPath
+        colorView.layer.mask = maskLayer
+    }
+
     private func setupConstraints() {
         colorView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +77,7 @@ class NoteCollectionViewCell: UICollectionViewCell {
             colorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             colorView.topAnchor.constraint(equalTo: contentView.topAnchor),
             colorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            colorView.widthAnchor.constraint(equalToConstant: 8),
+            colorView.widthAnchor.constraint(equalToConstant: 10),
 
             titleLabel.leadingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: 8),
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
@@ -85,6 +97,10 @@ class NoteCollectionViewCell: UICollectionViewCell {
             actionIcon.widthAnchor.constraint(equalToConstant: 20),
             actionIcon.heightAnchor.constraint(equalToConstant: 20)
         ])
+
+        DispatchQueue.main.async {
+            self.setColorViewCorners()
+        }
     }
 
     func configure(with title: String, description: String, date: String, iconColor: UIColor) {
