@@ -43,6 +43,7 @@ class NoteCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .snBackgroundCell
         contentView.layer.cornerRadius = 10
         contentView.layer.borderWidth = 1
+        contentView.layer.masksToBounds = true
         contentView.layer.borderColor = UIColor.snCellBorder.cgColor
 
         colorView.backgroundColor = .green
@@ -62,7 +63,7 @@ class NoteCollectionViewCell: UICollectionViewCell {
         dateLabel.textColor = .gray
         contentView.addSubview(dateLabel)
 
-        actionIcon.image = UIImage(systemName: "trash")
+        actionIcon.image = UIImage(named: "dots")
         actionIcon.tintColor = .gray
         contentView.addSubview(actionIcon)
     }
