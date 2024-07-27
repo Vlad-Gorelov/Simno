@@ -65,6 +65,14 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
     // MARK: - UICollectionViewDelegateFlowLayout
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 100)
+        let cellWidth = collectionView.frame.width 
+        let dummyCell = NoteCollectionViewCell(frame: CGRect(x: 0, y: 0, width: cellWidth, height: CGFloat.greatestFiniteMagnitude))
+        let note = notes[indexPath.item]
+        dummyCell.configure(with: note.title, description: note.description, date: note.date, iconColor: note.color)
+        dummyCell.layoutIfNeeded()
+
+        let targetSize = CGSize(width: cellWidth, height: UIView.layoutFittingCompressedSize.height)
+        let size = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        return CGSize(width: cellWidth, height: size.height)
     }
 }
