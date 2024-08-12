@@ -10,9 +10,9 @@ import UIKit
 class NoteCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var notes: [(title: String, description: String, date: String, color: UIColor)] = [
-        ("Заголовок 1", "Поливать растения", "20.07.2024, 11:24", .snColor1),
-        ("Заголовок 2", "Купить продукты", "20.07.2024, 13:42", .snColor2),
-        ("Заголовок 3", "Забрать посылку", "20.07.2024, 09:30", .snColor3)
+//        ("Заголовок 1", "Поливать растения", "20.07.2024, 11:24", .snColor1),
+//        ("Заголовок 2", "Купить продукты", "20.07.2024, 13:42", .snColor2),
+//        ("Заголовок 3", "Забрать посылку", "20.07.2024, 09:30", .snColor3)
     ]
 
     var filteredNotes: [(title: String, description: String, date: String, color: UIColor)] = []
@@ -38,12 +38,13 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         super.viewDidLoad()
         view.backgroundColor = .snBackground
         view.addSubview(collectionView)
-        collectionView.showsVerticalScrollIndicator = false
 
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .snBackground
         collectionView.register(NoteCollectionViewCell.self, forCellWithReuseIdentifier: "NoteCell")
+
+        collectionView.showsVerticalScrollIndicator = false
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

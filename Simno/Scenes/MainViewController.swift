@@ -5,19 +5,47 @@
 //  Created by Владислав Горелов on 27.07.2024.
 //
 
-
 import UIKit
 
 final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBarDelegate {
 
     let collectionViewController = NoteCollectionViewController()
+    var isSortedAscending = true 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .snBackground
+        setupNavigationBar()
         setupSearchBar()
         setupCollectionView()
         setupNewNoteButton()
+    }
+
+    private func setupNavigationBar() {
+        title = "Simno"
+
+        let filterButton = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down"), style: .plain, target: self, action: #selector(filterButtonTapped))
+        filterButton.tintColor = .snText
+        navigationItem.rightBarButtonItem = filterButton
+    }
+
+    @objc private func filterButtonTapped() {
+        isSortedAscending.toggle()
+
+        if isSortedAscending {
+            collectionViewController.filteredNotes.sort { $0.title.lowercased() < $1.title.lowercased() }
+        } else {
+            collectionViewController.filteredNotes.sort { $0.title.lowercased() > $1.title.lowercased() }
+        }
+
+        UIView.transition(with: collectionViewController.collectionView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.collectionViewController.collectionView.reloadData()
+        }, completion: nil)
+    }
+
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        collectionViewController.filterNotes(with: searchText)
     }
 
     private func setupSearchBar() {
@@ -33,15 +61,11 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         view.addSubview(searchBar)
 
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             searchBar.heightAnchor.constraint(equalToConstant: 48)
         ])
-    }
-
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        collectionViewController.filterNotes(with: searchText)
     }
 
     private func setupCollectionView() {
@@ -50,7 +74,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         collectionViewController.view.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            collectionViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+            collectionViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 64),
             collectionViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionViewController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -72)
