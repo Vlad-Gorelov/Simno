@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class MainViewController: UIViewController, CreateNoteDelegate {
+final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBarDelegate {
 
     let collectionViewController = NoteCollectionViewController()
 
@@ -24,6 +24,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.placeholder = "Поиск"
+        searchBar.delegate = self
 
         searchBar.backgroundImage = UIImage()
         searchBar.backgroundColor = .clear
@@ -37,6 +38,10 @@ final class MainViewController: UIViewController, CreateNoteDelegate {
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             searchBar.heightAnchor.constraint(equalToConstant: 48)
         ])
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        collectionViewController.filterNotes(with: searchText)
     }
 
     private func setupCollectionView() {
@@ -95,6 +100,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate {
 
         let newNote = (title: title, description: description, date: date, color: color)
         collectionViewController.notes.append(newNote)
+        collectionViewController.filteredNotes = collectionViewController.notes
         collectionViewController.collectionView.reloadData()
     }
 }

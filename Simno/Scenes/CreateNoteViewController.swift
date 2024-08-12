@@ -101,24 +101,15 @@ final class CreateNoteViewController: UIViewController {
     }()
 
 
-    // ==
     private let colorView: UIView = {
-            let view = UIView()
-            view.layer.cornerRadius = 24
-            view.translatesAutoresizingMaskIntoConstraints = false
-            return view
-        }()
+        let view = UIView()
+        view.layer.cornerRadius = 24
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
-    //==
-        private let borderLayer: CAShapeLayer = {
-            let layer = CAShapeLayer()
-            layer.lineWidth = 5
-            layer.fillColor = UIColor.clear.cgColor
-            layer.strokeColor = UIColor.clear.cgColor
-            return layer
-        }()
 
-    
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -220,6 +211,16 @@ class ColorCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+
+    func highlightColor() {
+        layer.borderWidth = 3.0
+        layer.borderColor = colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
+        layer.cornerRadius = 8
+    }
+
+    func unhighlightColor() {
+        layer.borderWidth = 0.0
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

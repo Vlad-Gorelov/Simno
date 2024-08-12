@@ -15,6 +15,8 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         ("Заголовок 3", "Забрать посылку", "20.07.2024, 09:30", .snColor3)
     ]
 
+    var filteredNotes: [(title: String, description: String, date: String, color: UIColor)] = []
+
     let collectionView: UICollectionView
 
     init() {
@@ -24,6 +26,8 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         super.init(nibName: nil, bundle: nil)
+
+        filteredNotes = notes
     }
 
     required init?(coder: NSCoder) {
@@ -34,6 +38,7 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         super.viewDidLoad()
         view.backgroundColor = .snBackground
         view.addSubview(collectionView)
+        collectionView.showsVerticalScrollIndicator = false
 
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -49,15 +54,27 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         ])
     }
 
+    func filterNotes(with searchText: String) {
+        if searchText.isEmpty {
+            filteredNotes = notes
+        } else {
+            filteredNotes = notes.filter { note in
+                note.title.lowercased().contains(searchText.lowercased()) ||
+                note.description.lowercased().contains(searchText.lowercased())
+            }
+        }
+        collectionView.reloadData()
+    }
+
     // MARK: - UICollectionViewDataSource
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return notes.count
+        return filteredNotes.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NoteCell", for: indexPath) as! NoteCollectionViewCell
-        let note = notes[indexPath.item]
+        let note = filteredNotes[indexPath.item]
         cell.configure(with: note.title, description: note.description, date: note.date, iconColor: note.color)
         return cell
     }
@@ -65,9 +82,9 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
     // MARK: - UICollectionViewDelegateFlowLayout
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = collectionView.frame.width 
+        let cellWidth = collectionView.frame.width
         let dummyCell = NoteCollectionViewCell(frame: CGRect(x: 0, y: 0, width: cellWidth, height: CGFloat.greatestFiniteMagnitude))
-        let note = notes[indexPath.item]
+        let note = filteredNotes[indexPath.item]
         dummyCell.configure(with: note.title, description: note.description, date: note.date, iconColor: note.color)
         dummyCell.layoutIfNeeded()
 
