@@ -20,12 +20,19 @@ final class CreateNoteViewController: UIViewController {
         textField.placeholder = "Заголовок"
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         textField.borderStyle = .roundedRect
-        textField.textColor = .lightGray
         textField.layer.borderColor = UIColor.snCellBorder.cgColor
         textField.layer.borderWidth = 1
         textField.layer.cornerRadius = 10
-        textField.layer.masksToBounds = true  // Добавляем эту строку
+        textField.layer.masksToBounds = true
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .snBackgroundCell // Устанавливаем цвет фона в .blue
+
+        let placeholderColor = UIColor.lightGray
+        textField.attributedPlaceholder = NSAttributedString(
+            string: "Заголовок",
+            attributes: [.foregroundColor: placeholderColor]
+        )
+
         return textField
     }()
 
@@ -34,7 +41,6 @@ final class CreateNoteViewController: UIViewController {
         label.text = "Описание"
         label.textColor = .lightGray
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -45,8 +51,10 @@ final class CreateNoteViewController: UIViewController {
         textView.layer.borderWidth = 1
         textView.layer.cornerRadius = 10
         textView.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        textView.textContainer.lineFragmentPadding = 0
+        textView.backgroundColor = .snBackgroundCell
         return textView
     }()
 
@@ -64,8 +72,6 @@ final class CreateNoteViewController: UIViewController {
     ]
 
     var selectedColor: UIColor = .snColor1
-
-    // MARK: - Collection View Setup
 
     let colorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -111,7 +117,13 @@ final class CreateNoteViewController: UIViewController {
         view.backgroundColor = .snBackground
         colorCollectionView.dataSource = self
         colorCollectionView.delegate = self
+        descriptionTextView.delegate = self
+        titleTextField.delegate = self
         setupViews()
+        colorCollectionView.backgroundColor = .snBackground
+        descriptionPlaceholderLabel.isHidden = !descriptionTextView.text.isEmpty
+
+        titleTextField.addTarget(self, action: #selector(titleTextFieldDidChange), for: .editingChanged)
     }
 
     private func setupViews() {
@@ -152,18 +164,31 @@ final class CreateNoteViewController: UIViewController {
         ])
     }
 
+    @objc private func titleTextFieldDidChange() {
+        titleTextField.textColor = .snText
+    }
+
     @objc private func createButtonTapped() {
-        guard let title = titleTextField.text, !title.isEmpty,
-              let description = descriptionTextView.text, !description.isEmpty else {
-            let alert = UIAlertController(title: "Ошибка", message: "Заполните все поля", preferredStyle: .alert)
+        guard let title = titleTextField.text, !title.isEmpty else {
+            let alert = UIAlertController(title: "Ошибка", message: "Заголовок обязателен\nдля заполнения", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
             return
         }
 
+        let description: String
+        guard !descriptionTextView.text.isEmpty else {
+            description = ""
+            delegate?.didCreateNote(title: title, description: description, color: selectedColor)
+            dismiss(animated: true, completion: nil)
+            return
+        }
+
+        description = descriptionTextView.text
         delegate?.didCreateNote(title: title, description: description, color: selectedColor)
         dismiss(animated: true, completion: nil)
     }
+
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate
@@ -175,20 +200,20 @@ extension CreateNoteViewController: UICollectionViewDataSource, UICollectionView
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.identifier, for: indexPath) as! ColorCell
-        cell.configure(color: colors[indexPath.item], isSelected: colors[indexPath.item] == selectedColor)
+        let color = colors[indexPath.item]
+        cell.configure(color: color, isSelected: color == selectedColor)
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedColor = colors[indexPath.item]
+        collectionView.reloadData() // Перезагружаем коллекцию, чтобы обновить обводку выбранного цвета
     }
 
-    // MARK: - Устанавливаем размер ячеек и отступы
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 48, height: 48)
     }
 
-    // MARK: - Отступы для секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let sideInset: CGFloat = 24
         return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
@@ -207,16 +232,6 @@ class ColorCell: UICollectionViewCell {
         return view
     }()
 
-    func highlightColor() {
-        layer.borderWidth = 3.0
-        layer.borderColor = colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
-        layer.cornerRadius = 8
-    }
-
-    func unhighlightColor() {
-        layer.borderWidth = 0.0
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(colorView)
@@ -232,14 +247,55 @@ class ColorCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    //TODO: - Change select color border from inner to outside
+
     func configure(color: UIColor, isSelected: Bool) {
         colorView.backgroundColor = color
         if isSelected {
-            colorView.layer.borderColor = color.withAlphaComponent(0.3).cgColor
+            colorView.layer.borderColor = UIColor.snWhiteMask.cgColor
             colorView.layer.borderWidth = 5
         } else {
             colorView.layer.borderColor = UIColor.clear.cgColor
             colorView.layer.borderWidth = 0
         }
+    }
+
+}
+
+// MARK: - UITextFieldDelegate
+
+extension CreateNoteViewController: UITextFieldDelegate {
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == titleTextField {
+            titleTextField.layer.borderColor = UIColor.snActiveField.cgColor
+        }
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == titleTextField {
+            titleTextField.layer.borderColor = UIColor.snCellBorder.cgColor
+        }
+    }
+}
+
+// MARK: - UITextViewDelegate
+
+extension CreateNoteViewController: UITextViewDelegate {
+
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView == descriptionTextView {
+            descriptionTextView.layer.borderColor = UIColor.snActiveField.cgColor
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView == descriptionTextView {
+            descriptionTextView.layer.borderColor = UIColor.snCellBorder.cgColor
+        }
+    }
+
+    func textViewDidChange(_ textView: UITextView) {
+        descriptionPlaceholderLabel.isHidden = !textView.text.isEmpty
     }
 }

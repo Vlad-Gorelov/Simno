@@ -39,6 +39,10 @@ extension UIColor {
     static var snMainColor: UIColor { UIColor(named: "MainColor") ?? UIColor.blue }
     static var snText: UIColor { UIColor(named: "TextColor") ?? UIColor.blue }
     static var snCellBorder: UIColor { UIColor(named: "CellBorderColor") ?? UIColor.blue }
+    static var snPlaceholder: UIColor { UIColor(named: "Placeholder") ?? UIColor.blue }
+    static var snActiveField: UIColor { UIColor(named: "ActiveField") ?? UIColor.blue }
+    static var snWhiteMask: UIColor { UIColor(named: "WhiteMask") ?? UIColor.blue }
+
 
 
     // MARK: - Notes Colors
