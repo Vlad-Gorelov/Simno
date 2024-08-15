@@ -29,7 +29,6 @@ final class CreateNoteViewController: UIViewController {
         return textField
     }()
 
-
     let descriptionPlaceholderLabel: UILabel = {
         let label = UILabel()
         label.text = "Описание"
@@ -100,16 +99,12 @@ final class CreateNoteViewController: UIViewController {
         return label
     }()
 
-
     private let colorView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 24
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
-
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -248,4 +243,3 @@ class ColorCell: UICollectionViewCell {
         }
     }
 }
-

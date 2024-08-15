@@ -9,8 +9,20 @@ import UIKit
 
 final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBarDelegate {
 
+    //MARK: - Properties
+
     let collectionViewController = NoteCollectionViewController()
-    var isSortedAscending = true 
+    var isSortedAscending = true
+
+    private let emptyTextLabel: UILabel = {
+        let label = UILabel()
+        label.text = "У вас ещё нет заметок"
+        label.textColor = .snText
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.isHidden = false
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +31,10 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         setupSearchBar()
         setupCollectionView()
         setupNewNoteButton()
+        setupEmptyTextLabel()
     }
+
+    //MARK: - Methods
 
     private func setupNavigationBar() {
         title = "Simno"
@@ -29,23 +44,25 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         navigationItem.rightBarButtonItem = filterButton
     }
 
-    @objc private func filterButtonTapped() {
-        isSortedAscending.toggle()
+    private func setupEmptyTextLabel() {
+        view.addSubview(emptyTextLabel)
+        view.bringSubviewToFront(emptyTextLabel)
+        emptyTextLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        if isSortedAscending {
-            collectionViewController.filteredNotes.sort { $0.title.lowercased() < $1.title.lowercased() }
-        } else {
-            collectionViewController.filteredNotes.sort { $0.title.lowercased() > $1.title.lowercased() }
-        }
-
-        UIView.transition(with: collectionViewController.collectionView, duration: 0.3, options: .transitionCrossDissolve, animations: {
-            self.collectionViewController.collectionView.reloadData()
-        }, completion: nil)
+        NSLayoutConstraint.activate([
+            emptyTextLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyTextLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
-
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         collectionViewController.filterNotes(with: searchText)
+
+        if collectionViewController.filteredNotes.isEmpty {
+            updateEmptyTextLabelVisibility(withText: "Ничего не найдено")
+        } else {
+            updateEmptyTextLabelVisibility()
+        }
     }
 
     private func setupSearchBar() {
@@ -53,7 +70,6 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.placeholder = "Поиск"
         searchBar.delegate = self
-
         searchBar.backgroundImage = UIImage()
         searchBar.backgroundColor = .clear
         searchBar.barTintColor = .clear
@@ -110,21 +126,48 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         button.addTarget(self, action: #selector(newNoteButtonTapped), for: .touchUpInside)
     }
 
-    @objc private func newNoteButtonTapped() {
-        let createNoteVC = CreateNoteViewController()
-        createNoteVC.delegate = self
-        present(createNoteVC, animated: true, completion: nil)
-    }
-
     func didCreateNote(title: String, description: String, color: UIColor) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
         let date = dateFormatter.string(from: Date())
-
         let newNote = (title: title, description: description, date: date, color: color)
         collectionViewController.notes.append(newNote)
         collectionViewController.filteredNotes = collectionViewController.notes
         collectionViewController.collectionView.reloadData()
+
+        updateEmptyTextLabelVisibility()
+    }
+
+    private func updateEmptyTextLabelVisibility(withText text: String? = nil) {
+        let isEmpty = collectionViewController.filteredNotes.isEmpty
+        if let text = text {
+            emptyTextLabel.text = text
+        } else {
+            emptyTextLabel.text = "У вас ещё нет заметок"
+        }
+        emptyTextLabel.isHidden = !isEmpty
+    }
+
+    //MARK: - Obj-C
+
+    @objc private func filterButtonTapped() {
+        isSortedAscending.toggle()
+
+        if isSortedAscending {
+            collectionViewController.filteredNotes.sort { $0.title.lowercased() < $1.title.lowercased() }
+        } else {
+            collectionViewController.filteredNotes.sort { $0.title.lowercased() > $1.title.lowercased() }
+        }
+
+        UIView.transition(with: collectionViewController.collectionView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.collectionViewController.collectionView.reloadData()
+        }, completion: nil)
+    }
+
+    @objc private func newNoteButtonTapped() {
+        let createNoteVC = CreateNoteViewController()
+        createNoteVC.delegate = self
+        present(createNoteVC, animated: true, completion: nil)
     }
 }
