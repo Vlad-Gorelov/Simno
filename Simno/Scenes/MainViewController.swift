@@ -32,9 +32,16 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         setupCollectionView()
         setupNewNoteButton()
         setupEmptyTextLabel()
+        hideKeyboard()
     }
 
     //MARK: - Methods
+
+    private func hideKeyboard() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
 
     private func setupNavigationBar() {
         title = "Simno"
@@ -59,10 +66,14 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         collectionViewController.filterNotes(with: searchText)
 
         if collectionViewController.filteredNotes.isEmpty {
-            updateEmptyTextLabelVisibility(withText: "Ничего не найдено")
+            updateEmptyTextLabelVisibility(withText: "Заметок не найдено")
         } else {
             updateEmptyTextLabelVisibility()
         }
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 
     private func setupSearchBar() {
@@ -105,7 +116,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         button.backgroundColor = UIColor(named: "MainColor") ?? .blue
         button.setTitle(" Новая заметка", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
 
         let plusImage = UIImage(systemName: "plus")?.withRenderingMode(.alwaysTemplate)
         button.setImage(plusImage, for: .normal)
@@ -169,5 +180,9 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         let createNoteVC = CreateNoteViewController()
         createNoteVC.delegate = self
         present(createNoteVC, animated: true, completion: nil)
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
