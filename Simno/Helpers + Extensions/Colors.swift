@@ -37,13 +37,13 @@ extension UIColor {
     static var snBackground: UIColor { UIColor(named: "Background") ?? UIColor.white }
     static var snBackgroundCell: UIColor { UIColor(named: "BackgroundCell") ?? UIColor.lightGray }
     static var snMainColor: UIColor { UIColor(named: "MainColor") ?? UIColor.blue }
-    static var snText: UIColor { UIColor(named: "TextColor") ?? UIColor.blue }
-    static var snCellBorder: UIColor { UIColor(named: "CellBorderColor") ?? UIColor.blue }
-    static var snPlaceholder: UIColor { UIColor(named: "Placeholder") ?? UIColor.blue }
-    static var snActiveField: UIColor { UIColor(named: "ActiveField") ?? UIColor.blue }
-    static var snWhiteMask: UIColor { UIColor(named: "WhiteMask") ?? UIColor.blue }
-
-
+    static var snText: UIColor { UIColor(named: "TextColor") ?? UIColor.black }
+    static var snCellBorder: UIColor { UIColor(named: "CellBorderColor") ?? UIColor.gray }
+    static var snPlaceholder: UIColor { UIColor(named: "Placeholder") ?? UIColor.lightGray }
+    static var snActiveField: UIColor { UIColor(named: "ActiveField") ?? UIColor.darkGray }
+    static var snWhiteMask: UIColor { UIColor(named: "WhiteMask") ?? UIColor.white }
+    static var snLightGray: UIColor { UIColor(named: "SimnoLightGray") ?? UIColor.lightGray }
+    
 
     // MARK: - Notes Colors
 
@@ -57,6 +57,5 @@ extension UIColor {
     static var snColor8: UIColor { UIColor(named: "NotesColor8") ?? UIColor.magenta }
     static var snColor9: UIColor { UIColor(named: "NotesColor9") ?? UIColor.systemPurple }
     static var snColor10: UIColor { UIColor(named: "NotesColor10") ?? UIColor.systemPink }
-
 }
 

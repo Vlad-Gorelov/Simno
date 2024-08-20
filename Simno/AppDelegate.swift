@@ -37,6 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        ValueTransformer.setValueTransformer(ColorTransformer(), forName: NSValueTransformerName("ColorTransformer"))
+
         window = UIWindow(frame: UIScreen.main.bounds)
         let mainViewController = MainViewController()
         let navigationController = UINavigationController(rootViewController: mainViewController)
