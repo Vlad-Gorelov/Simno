@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class NoteCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
@@ -36,6 +37,12 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .snBackground
+        
+        fetchNotes()
+        setCollectionView()
+    }
+
+    func setCollectionView() {
         view.addSubview(collectionView)
 
         collectionView.dataSource = self
@@ -53,6 +60,31 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+
+    func fetchNotes() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<Note> = Note.fetchRequest()
+
+        do {
+            let savedNotes = try context.fetch(fetchRequest)
+            notes = savedNotes.map { note in
+                return (title: note.title ?? "", description: note.noteDescription ?? "", date: formatDate(note.date ?? Date()), color: note.color as? UIColor ?? .white)
+            }
+            filteredNotes = notes
+            collectionView.reloadData()
+        } catch {
+            print("Failed to fetch notes: \(error.localizedDescription)")
+        }
+    }
+
+    func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: date)
+    }
+
 
     func filterNotes(with searchText: String) {
         if searchText.isEmpty {

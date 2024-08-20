@@ -13,6 +13,7 @@
 		8B14399D2C54FC1A00B7C6FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B14399C2C54FC1A00B7C6FF /* Assets.xcassets */; };
 		8B1439A02C54FC1A00B7C6FF /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 8B14399F2C54FC1A00B7C6FF /* Base */; };
 		8B1439A92C55036000B7C6FF /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1439A82C55036000B7C6FF /* Colors.swift */; };
+		8BA15FF62C751DF100A68F55 /* SimnoDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8BA15FF42C751DF100A68F55 /* SimnoDataModel.xcdatamodeld */; };
 		8BCE99C12C550BAD007AD8D6 /* NoteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCE99C02C550BAD007AD8D6 /* NoteCollectionViewCell.swift */; };
 		8BCE99C32C550BE1007AD8D6 /* NoteCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCE99C22C550BE1007AD8D6 /* NoteCollectionViewController.swift */; };
 		8BCE99C52C551779007AD8D6 /* CreateNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCE99C42C551779007AD8D6 /* CreateNoteViewController.swift */; };
@@ -27,6 +28,7 @@
 		8B14399F2C54FC1A00B7C6FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B1439A12C54FC1A00B7C6FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B1439A82C55036000B7C6FF /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		8BA15FF52C751DF100A68F55 /* SimnoDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimnoDataModel.xcdatamodel; sourceTree = "<group>"; };
 		8BCE99C02C550BAD007AD8D6 /* NoteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCollectionViewCell.swift; sourceTree = "<group>"; };
 		8BCE99C22C550BE1007AD8D6 /* NoteCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCollectionViewController.swift; sourceTree = "<group>"; };
 		8BCE99C42C551779007AD8D6 /* CreateNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNoteViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				8B1439932C54FC1700B7C6FF /* AppDelegate.swift */,
 				8B1439952C54FC1700B7C6FF /* SceneDelegate.swift */,
 				8B1439AA2C55084E00B7C6FF /* Scenes */,
+				8BA15FF72C751DF700A68F55 /* CoreData */,
 				8B1439A12C54FC1A00B7C6FF /* Info.plist */,
 			);
 			path = Simno;
@@ -90,6 +93,14 @@
 				8BCE99C22C550BE1007AD8D6 /* NoteCollectionViewController.swift */,
 			);
 			path = Scenes;
+			sourceTree = "<group>";
+		};
+		8BA15FF72C751DF700A68F55 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				8BA15FF42C751DF100A68F55 /* SimnoDataModel.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,6 +177,7 @@
 				8BCE99C32C550BE1007AD8D6 /* NoteCollectionViewController.swift in Sources */,
 				8B1439942C54FC1700B7C6FF /* AppDelegate.swift in Sources */,
 				8B1439962C54FC1700B7C6FF /* SceneDelegate.swift in Sources */,
+				8BA15FF62C751DF100A68F55 /* SimnoDataModel.xcdatamodeld in Sources */,
 				8BCE99C12C550BAD007AD8D6 /* NoteCollectionViewCell.swift in Sources */,
 				8BCE99C52C551779007AD8D6 /* CreateNoteViewController.swift in Sources */,
 				8B1439A92C55036000B7C6FF /* Colors.swift in Sources */,
@@ -393,6 +405,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		8BA15FF42C751DF100A68F55 /* SimnoDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				8BA15FF52C751DF100A68F55 /* SimnoDataModel.xcdatamodel */,
+			);
+			currentVersion = 8BA15FF52C751DF100A68F55 /* SimnoDataModel.xcdatamodel */;
+			path = SimnoDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 8B1439882C54FC1700B7C6FF /* Project object */;
 }

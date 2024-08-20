@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 protocol CreateNoteDelegate: AnyObject {
     func didCreateNote(title: String, description: String, color: UIColor)
@@ -192,18 +193,26 @@ final class CreateNoteViewController: UIViewController {
             return
         }
 
-        let description: String
-        guard !descriptionTextView.text.isEmpty else {
-            description = ""
+        let description: String = descriptionTextView.text ?? ""
+
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+
+        let note = NSEntityDescription.insertNewObject(forEntityName: "Note", into: context) as! Note
+        note.title = title
+        note.noteDescription = description
+        note.date = Date()
+        note.color = selectedColor
+
+        do {
+            try context.save()
             delegate?.didCreateNote(title: title, description: description, color: selectedColor)
             dismiss(animated: true, completion: nil)
-            return
+        } catch {
+            print("Failed to save note: \(error.localizedDescription)")
         }
-
-        description = descriptionTextView.text
-        delegate?.didCreateNote(title: title, description: description, color: selectedColor)
-        dismiss(animated: true, completion: nil)
     }
+
 
     @objc private func dismissKeyboard() {
         view.endEditing(true)

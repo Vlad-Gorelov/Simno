@@ -138,17 +138,10 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
     }
 
     func didCreateNote(title: String, description: String, color: UIColor) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        let date = dateFormatter.string(from: Date())
-        let newNote = (title: title, description: description, date: date, color: color)
-        collectionViewController.notes.append(newNote)
-        collectionViewController.filteredNotes = collectionViewController.notes
-        collectionViewController.collectionView.reloadData()
-
+        collectionViewController.fetchNotes()
         updateEmptyTextLabelVisibility()
     }
+
 
     private func updateEmptyTextLabelVisibility(withText text: String? = nil) {
         let isEmpty = collectionViewController.filteredNotes.isEmpty
