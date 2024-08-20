@@ -33,6 +33,8 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         setupNewNoteButton()
         setupEmptyTextLabel()
         hideKeyboard()
+        collectionViewController.fetchNotes()
+        updateEmptyTextLabelVisibility()
     }
 
     //MARK: - Methods
@@ -142,8 +144,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         updateEmptyTextLabelVisibility()
     }
 
-
-    private func updateEmptyTextLabelVisibility(withText text: String? = nil) {
+    func updateEmptyTextLabelVisibility(withText text: String? = nil) {
         let isEmpty = collectionViewController.filteredNotes.isEmpty
         if let text = text {
             emptyTextLabel.text = text
@@ -168,7 +169,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
             self.collectionViewController.collectionView.reloadData()
         }, completion: nil)
     }
-
+    
     @objc private func newNoteButtonTapped() {
         let createNoteVC = CreateNoteViewController()
         createNoteVC.delegate = self

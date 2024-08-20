@@ -11,9 +11,6 @@ import CoreData
 class NoteCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var notes: [(title: String, description: String, date: String, color: UIColor)] = [
-        //        ("Заголовок 1", "Поливать растения", "20.07.2024, 11:24", .snColor1),
-        //        ("Заголовок 2", "Купить продукты", "20.07.2024, 13:42", .snColor2),
-        //        ("Заголовок 3", "Забрать посылку", "20.07.2024, 09:30", .snColor3)
     ]
 
     var filteredNotes: [(title: String, description: String, date: String, color: UIColor)] = []
@@ -73,10 +70,13 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
             }
             filteredNotes = notes
             collectionView.reloadData()
+
+            (parent as? MainViewController)?.updateEmptyTextLabelVisibility()
         } catch {
             print("Failed to fetch notes: \(error.localizedDescription)")
         }
     }
+
 
     func formatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
