@@ -114,7 +114,7 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
 
     func didTapPinButton(on cell: NoteCollectionViewCell) {
         //TODO: - pin logic
-        print("Заметка закреплена")
+        print("MenuPin".localized)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

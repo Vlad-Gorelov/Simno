@@ -16,7 +16,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
 
     private let emptyTextLabel: UILabel = {
         let label = UILabel()
-        label.text = "У вас ещё нет заметок"
+        label.text = "NoNotes".localized
         label.textColor = .snText
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
@@ -68,7 +68,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         collectionViewController.filterNotes(with: searchText)
 
         if collectionViewController.filteredNotes.isEmpty {
-            updateEmptyTextLabelVisibility(withText: "Заметок не найдено")
+            updateEmptyTextLabelVisibility(withText: "NoFound".localized)
         } else {
             updateEmptyTextLabelVisibility()
         }
@@ -81,7 +81,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
     private func setupSearchBar() {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.placeholder = "Поиск"
+        searchBar.placeholder = "Search".localized
         searchBar.delegate = self
         searchBar.backgroundImage = UIImage()
         searchBar.backgroundColor = .clear
@@ -116,7 +116,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor(named: "MainColor") ?? .blue
-        button.setTitle(" Новая заметка", for: .normal)
+        button.setTitle("NewNote".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
 
@@ -149,7 +149,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         if let text = text {
             emptyTextLabel.text = text
         } else {
-            emptyTextLabel.text = "У вас ещё нет заметок"
+            emptyTextLabel.text = "NoNotes".localized
         }
         emptyTextLabel.isHidden = !isEmpty
     }

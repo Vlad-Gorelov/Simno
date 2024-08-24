@@ -21,7 +21,7 @@ final class CreateNoteViewController: UIViewController {
     
     let titleTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Заголовок"
+        textField.placeholder = "Title".localized
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         textField.borderStyle = .roundedRect
         textField.layer.borderColor = UIColor.snCellBorder.cgColor
@@ -37,7 +37,7 @@ final class CreateNoteViewController: UIViewController {
         
         let placeholderColor = UIColor.lightGray
         textField.attributedPlaceholder = NSAttributedString(
-            string: "Заголовок",
+            string: "Title".localized,
             attributes: [.foregroundColor: placeholderColor]
         )
         
@@ -46,7 +46,7 @@ final class CreateNoteViewController: UIViewController {
     
     let descriptionPlaceholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Описание"
+        label.text = "Description".localized
         label.textColor = .lightGray
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -94,7 +94,7 @@ final class CreateNoteViewController: UIViewController {
     
     let createButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Создать", for: .normal)
+        button.setTitle("CreateBtn".localized, for: .normal)
         button.backgroundColor = .snMainColor
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -106,7 +106,7 @@ final class CreateNoteViewController: UIViewController {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая заметка"
+        label.text = "NewNote".localized
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -186,8 +186,8 @@ final class CreateNoteViewController: UIViewController {
         noteToEdit = note
         
         // Updating UI
-        titleLabel.text = "Редактирование"
-        createButton.setTitle("Сохранить изменения", for: .normal)
+        titleLabel.text = "Editing".localized
+        createButton.setTitle("SaveChanges".localized, for: .normal)
         descriptionPlaceholderLabel.isHidden = true
     }
     
@@ -200,7 +200,7 @@ final class CreateNoteViewController: UIViewController {
     
     @objc private func createButtonTapped() {
         guard let title = titleTextField.text, !title.isEmpty else {
-            let alert = UIAlertController(title: "", message: "Заголовок обязателен\nдля заполнения", preferredStyle: .alert)
+            let alert = UIAlertController(title: "", message: "Warning".localized, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
             return

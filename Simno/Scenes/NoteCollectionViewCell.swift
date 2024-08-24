@@ -97,17 +97,17 @@ class NoteCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupMenu() {
-        let editAction = UIAction(title: "Редактировать", image: UIImage(named: "edit")) { [weak self] action in
+        let editAction = UIAction(title: "MenuEdit".localized, image: UIImage(named: "edit")) { [weak self] action in
             guard let self = self else { return }
             self.delegate?.didTapEditButton(on: self)
         }
 
-        let pinAction = UIAction(title: "Закрепить", image: UIImage(named: "bookmark")) { [weak self] action in
+        let pinAction = UIAction(title: "MenuPin".localized, image: UIImage(named: "bookmark")) { [weak self] action in
             guard let self = self else { return }
             self.delegate?.didTapPinButton(on: self)
         }
 
-        let deleteAction = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in
+        let deleteAction = UIAction(title: "MenuDelete".localized, image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in
             guard let self = self else { return }
             self.delegate?.didTapDeleteButton(on: self)
         }
