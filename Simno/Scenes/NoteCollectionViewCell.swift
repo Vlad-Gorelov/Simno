@@ -10,6 +10,7 @@ import UIKit
 protocol NoteCollectionViewCellDelegate: AnyObject {
     func didTapPinButton(on cell: NoteCollectionViewCell)
     func didTapDeleteButton(on cell: NoteCollectionViewCell)
+    func didTapEditButton(on cell: NoteCollectionViewCell)
 }
 
 class NoteCollectionViewCell: UICollectionViewCell {
@@ -96,7 +97,12 @@ class NoteCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupMenu() {
-        let pinAction = UIAction(title: "Закрепить", image: UIImage(systemName: "pin")) { [weak self] action in
+        let editAction = UIAction(title: "Редактировать", image: UIImage(named: "edit")) { [weak self] action in
+            guard let self = self else { return }
+            self.delegate?.didTapEditButton(on: self)
+        }
+
+        let pinAction = UIAction(title: "Закрепить", image: UIImage(named: "bookmark")) { [weak self] action in
             guard let self = self else { return }
             self.delegate?.didTapPinButton(on: self)
         }
@@ -105,8 +111,8 @@ class NoteCollectionViewCell: UICollectionViewCell {
             guard let self = self else { return }
             self.delegate?.didTapDeleteButton(on: self)
         }
-        
-        let menu = UIMenu(title: "", children: [pinAction, deleteAction])
+
+        let menu = UIMenu(title: "", children: [editAction, pinAction, deleteAction])
         actionIcon.menu = menu
         actionIcon.showsMenuAsPrimaryAction = true
     }

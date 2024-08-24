@@ -10,8 +10,8 @@ import CoreData
 
 class NoteCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, NoteCollectionViewCellDelegate {
 
-    var notes: [(title: String, description: String, date: String, color: UIColor)] = []
-    var filteredNotes: [(title: String, description: String, date: String, color: UIColor)] = []
+    var notes: [Note] = []
+    var filteredNotes: [Note] = []
     let collectionView: UICollectionView
 
     init() {
@@ -34,7 +34,6 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .snBackground
-
         fetchNotes()
         setCollectionView()
     }
@@ -65,9 +64,7 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
 
         do {
             let savedNotes = try context.fetch(fetchRequest)
-            notes = savedNotes.map { note in
-                return (title: note.title ?? "", description: note.noteDescription ?? "", date: formatDate(note.date ?? Date()), color: note.color as? UIColor ?? .white)
-            }
+            notes = savedNotes
             filteredNotes = notes
             collectionView.reloadData()
 
@@ -77,6 +74,18 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         }
     }
 
+    func filterNotes(with searchText: String) {
+        if searchText.isEmpty {
+            filteredNotes = notes
+        } else {
+            filteredNotes = notes.filter { note in
+                (note.title?.lowercased().contains(searchText.lowercased()) ?? false) ||
+                (note.noteDescription?.lowercased().contains(searchText.lowercased()) ?? false)
+            }
+        }
+        collectionView.reloadData()
+    }
+
     func formatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
@@ -84,17 +93,6 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         return dateFormatter.string(from: date)
     }
 
-    func filterNotes(with searchText: String) {
-        if searchText.isEmpty {
-            filteredNotes = notes
-        } else {
-            filteredNotes = notes.filter { note in
-                note.title.lowercased().contains(searchText.lowercased()) ||
-                note.description.lowercased().contains(searchText.lowercased())
-            }
-        }
-        collectionView.reloadData()
-    }
 
     // MARK: - UICollectionViewDataSource
 
@@ -105,7 +103,9 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NoteCell", for: indexPath) as! NoteCollectionViewCell
         let note = filteredNotes[indexPath.item]
-        cell.configure(with: note.title, description: note.description, date: note.date, iconColor: note.color)
+        let color = note.color as? UIColor ?? .white
+
+        cell.configure(with: note.title ?? "", description: note.noteDescription ?? "", date: formatDate(note.date ?? Date()), iconColor: color)
         cell.delegate = self
         return cell
     }
@@ -121,14 +121,13 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         let cellWidth = collectionView.frame.width
         let dummyCell = NoteCollectionViewCell(frame: CGRect(x: 0, y: 0, width: cellWidth, height: CGFloat.greatestFiniteMagnitude))
         let note = filteredNotes[indexPath.item]
-        dummyCell.configure(with: note.title, description: note.description, date: note.date, iconColor: note.color)
+        dummyCell.configure(with: note.title ?? "", description: note.noteDescription ?? "", date: formatDate(note.date ?? Date()), iconColor: (note.color as? UIColor) ?? .white)
         dummyCell.layoutIfNeeded()
 
         let targetSize = CGSize(width: cellWidth, height: UIView.layoutFittingCompressedSize.height)
         let size = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
         return CGSize(width: cellWidth, height: size.height)
     }
-
 
     func didTapDeleteButton(on cell: NoteCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
@@ -151,5 +150,14 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         } catch {
             print("Failed to delete note: \(error.localizedDescription)")
         }
+    }
+
+    func didTapEditButton(on cell: NoteCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let note = filteredNotes[indexPath.row]
+        let createNoteVC = CreateNoteViewController()
+        createNoteVC.delegate = parent as? CreateNoteDelegate
+        createNoteVC.configureForEditing(title: note.title ?? "", description: note.noteDescription ?? "", color: note.color as? UIColor ?? .white, note: note)
+        present(createNoteVC, animated: true, completion: nil)
     }
 }

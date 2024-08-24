@@ -160,10 +160,11 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
         isSortedAscending.toggle()
 
         if isSortedAscending {
-            collectionViewController.filteredNotes.sort { $0.title.lowercased() < $1.title.lowercased() }
+            collectionViewController.filteredNotes.sort { ($0.title?.lowercased() ?? "") < ($1.title?.lowercased() ?? "") }
         } else {
-            collectionViewController.filteredNotes.sort { $0.title.lowercased() > $1.title.lowercased() }
+            collectionViewController.filteredNotes.sort { ($0.title?.lowercased() ?? "") > ($1.title?.lowercased() ?? "") }
         }
+
 
         UIView.transition(with: collectionViewController.collectionView, duration: 0.3, options: .transitionCrossDissolve, animations: {
             self.collectionViewController.collectionView.reloadData()
