@@ -169,7 +169,7 @@ final class MainViewController: UIViewController, CreateNoteDelegate, UISearchBa
             self.collectionViewController.collectionView.reloadData()
         }, completion: nil)
     }
-    
+
     @objc private func newNoteButtonTapped() {
         let createNoteVC = CreateNoteViewController()
         createNoteVC.delegate = self

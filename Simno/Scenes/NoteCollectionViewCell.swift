@@ -7,36 +7,30 @@
 
 import UIKit
 
+protocol NoteCollectionViewCellDelegate: AnyObject {
+    func didTapPinButton(on cell: NoteCollectionViewCell)
+    func didTapDeleteButton(on cell: NoteCollectionViewCell)
+}
+
 class NoteCollectionViewCell: UICollectionViewCell {
+
+    weak var delegate: NoteCollectionViewCellDelegate?
 
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
     let dateLabel = UILabel()
     let colorView = UIView()
-    let actionIcon = UIImageView()
+    let actionIcon = UIButton(type: .system)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraints()
+        setupMenu()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setColorViewCorners()
-    }
-
-    private func setColorViewCorners() {
-        let maskPath = UIBezierPath(roundedRect: colorView.bounds,
-                                    byRoundingCorners: [.topLeft, .bottomLeft],
-                                    cornerRadii: CGSize(width: 10, height: 10))
-        let maskLayer = CAShapeLayer()
-        maskLayer.path = maskPath.cgPath
-        colorView.layer.mask = maskLayer
     }
 
     private func setupViews() {
@@ -63,7 +57,7 @@ class NoteCollectionViewCell: UICollectionViewCell {
         dateLabel.textColor = .gray
         contentView.addSubview(dateLabel)
 
-        actionIcon.image = UIImage(named: "dots")
+        actionIcon.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         actionIcon.tintColor = .gray
         contentView.addSubview(actionIcon)
     }
@@ -99,10 +93,22 @@ class NoteCollectionViewCell: UICollectionViewCell {
             actionIcon.widthAnchor.constraint(equalToConstant: 20),
             actionIcon.heightAnchor.constraint(equalToConstant: 20)
         ])
+    }
 
-        DispatchQueue.main.async {
-            self.setColorViewCorners()
+    private func setupMenu() {
+        let pinAction = UIAction(title: "Закрепить", image: UIImage(systemName: "pin")) { [weak self] action in
+            guard let self = self else { return }
+            self.delegate?.didTapPinButton(on: self)
         }
+
+        let deleteAction = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in
+            guard let self = self else { return }
+            self.delegate?.didTapDeleteButton(on: self)
+        }
+        
+        let menu = UIMenu(title: "", children: [pinAction, deleteAction])
+        actionIcon.menu = menu
+        actionIcon.showsMenuAsPrimaryAction = true
     }
 
     func configure(with title: String, description: String, date: String, iconColor: UIColor) {

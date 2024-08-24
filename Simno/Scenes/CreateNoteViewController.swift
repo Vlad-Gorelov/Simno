@@ -275,8 +275,6 @@ class ColorCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    //TODO: - Change select color border from inner to outside
-
     func configure(color: UIColor, isSelected: Bool) {
         colorView.backgroundColor = color
         if isSelected {
@@ -287,7 +285,6 @@ class ColorCell: UICollectionViewCell {
             colorView.layer.borderWidth = 0
         }
     }
-
 }
 
 // MARK: - UITextFieldDelegate
