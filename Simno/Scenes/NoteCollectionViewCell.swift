@@ -58,7 +58,7 @@ class NoteCollectionViewCell: UICollectionViewCell {
         dateLabel.textColor = .gray
         contentView.addSubview(dateLabel)
 
-        actionIcon.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        actionIcon.setImage(UIImage(named: "dots"), for: .normal)
         actionIcon.tintColor = .gray
         contentView.addSubview(actionIcon)
     }

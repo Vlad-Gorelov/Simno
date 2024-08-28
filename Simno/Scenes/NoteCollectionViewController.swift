@@ -132,23 +132,27 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
     func didTapDeleteButton(on cell: NoteCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
 
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        let fetchRequest: NSFetchRequest<Note> = Note.fetchRequest()
+        AlertHelper.showDeleteConfirmation(on: parent!) { confirmed in
+            if confirmed {
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                let context = appDelegate.persistentContainer.viewContext
+                let fetchRequest: NSFetchRequest<Note> = Note.fetchRequest()
 
-        do {
-            let savedNotes = try context.fetch(fetchRequest)
-            context.delete(savedNotes[indexPath.row])
-            try context.save()
+                do {
+                    let savedNotes = try context.fetch(fetchRequest)
+                    context.delete(savedNotes[indexPath.row])
+                    try context.save()
 
-            notes.remove(at: indexPath.row)
-            filteredNotes.remove(at: indexPath.row)
-            collectionView.deleteItems(at: [indexPath])
+                    self.notes.remove(at: indexPath.row)
+                    self.filteredNotes.remove(at: indexPath.row)
+                    self.collectionView.deleteItems(at: [indexPath])
 
-            (parent as? MainViewController)?.updateEmptyTextLabelVisibility()
+                    (self.parent as? MainViewController)?.updateEmptyTextLabelVisibility()
 
-        } catch {
-            print("Failed to delete note: \(error.localizedDescription)")
+                } catch {
+                    print("Failed to delete note: \(error.localizedDescription)")
+                }
+            }
         }
     }
 
