@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-class NoteCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, NoteCollectionViewCellDelegate {
+final class NoteCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, NoteCollectionViewCellDelegate {
 
     var notes: [Note] = []
     var filteredNotes: [Note] = []
@@ -65,7 +65,7 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         do {
             let savedNotes = try context.fetch(fetchRequest)
             notes = savedNotes
-            filteredNotes = notes
+            filteredNotes = notes.sorted { $0.isPinned && !$1.isPinned }
             collectionView.reloadData()
 
             (parent as? MainViewController)?.updateEmptyTextLabelVisibility()
@@ -76,25 +76,38 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
 
     func filterNotes(with searchText: String) {
         if searchText.isEmpty {
-            filteredNotes = notes
+            filteredNotes = notes.sorted { $0.isPinned && !$1.isPinned }
         } else {
             filteredNotes = notes.filter { note in
                 (note.title?.lowercased().contains(searchText.lowercased()) ?? false) ||
                 (note.noteDescription?.lowercased().contains(searchText.lowercased()) ?? false)
-            }
+            }.sorted { $0.isPinned && !$1.isPinned }
         }
         collectionView.reloadData()
     }
 
-    func formatDate(_ date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        return dateFormatter.string(from: date)
+    func didTapPinButton(on cell: NoteCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let note = filteredNotes[indexPath.item]
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+
+        // Снимаем закрепление с других заметок
+        if note.isPinned {
+            note.isPinned = false
+        } else {
+            notes.forEach { $0.isPinned = false }
+            note.isPinned = true
+        }
+
+        do {
+            try context.save()
+        } catch {
+            print("Failed to update pin status: \(error.localizedDescription)")
+        }
+
+        fetchNotes() // Обновляем коллекцию
     }
-
-
-    // MARK: - UICollectionViewDataSource
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filteredNotes.count
@@ -106,15 +119,16 @@ class NoteCollectionViewController: UIViewController, UICollectionViewDataSource
         let color = note.color as? UIColor ?? .white
 
         cell.configure(with: note.title ?? "", description: note.noteDescription ?? "", date: formatDate(note.date ?? Date()), iconColor: color)
+        cell.setPinned(note.isPinned)
         cell.delegate = self
         return cell
     }
 
-    // MARK: - NoteCollectionViewCellDelegate
-
-    func didTapPinButton(on cell: NoteCollectionViewCell) {
-        //TODO: - pin logic
-        print("MenuPin".localized)
+    func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: date)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

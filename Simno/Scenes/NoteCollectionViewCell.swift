@@ -23,11 +23,17 @@ class NoteCollectionViewCell: UICollectionViewCell {
     let colorView = UIView()
     let actionIcon = UIButton(type: .system)
 
+    private let pinIcon: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "pin.fill"))
+        imageView.tintColor = .systemBlue
+        imageView.isHidden = true
+        return imageView
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraints()
-        setupMenu()
     }
 
     required init?(coder: NSCoder) {
@@ -61,6 +67,8 @@ class NoteCollectionViewCell: UICollectionViewCell {
         actionIcon.setImage(UIImage(named: "dots"), for: .normal)
         actionIcon.tintColor = .gray
         contentView.addSubview(actionIcon)
+
+        contentView.addSubview(pinIcon)
     }
 
     private func setupConstraints() {
@@ -69,6 +77,7 @@ class NoteCollectionViewCell: UICollectionViewCell {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         actionIcon.translatesAutoresizingMaskIntoConstraints = false
+        pinIcon.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             colorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -92,19 +101,34 @@ class NoteCollectionViewCell: UICollectionViewCell {
             actionIcon.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             actionIcon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             actionIcon.widthAnchor.constraint(equalToConstant: 20),
-            actionIcon.heightAnchor.constraint(equalToConstant: 20)
+            actionIcon.heightAnchor.constraint(equalToConstant: 20),
+
+            pinIcon.widthAnchor.constraint(equalToConstant: 16),
+            pinIcon.heightAnchor.constraint(equalToConstant: 16),
+            pinIcon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14),
+            pinIcon.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -14)
         ])
     }
 
+    // Обновление отображения иконки канцелярской кнопки
+    func setPinned(_ isPinned: Bool) {
+        pinIcon.isHidden = !isPinned
+        setupMenu() // Обновляем меню в зависимости от текущего состояния закрепления
+    }
+
+    // Обновляем меню с учетом закрепления/открепления
     private func setupMenu() {
+        let pinTitle = pinIcon.isHidden ? "MenuPin".localized : "MenuUnpin".localized
+        let pinImage = pinIcon.isHidden ? UIImage(named: "bookmark") : UIImage(named: "bookmark.slash")
+
+        let pinAction = UIAction(title: pinTitle, image: pinImage) { [weak self] action in
+            guard let self = self else { return }
+            self.delegate?.didTapPinButton(on: self)
+        }
+
         let editAction = UIAction(title: "MenuEdit".localized, image: UIImage(named: "edit")) { [weak self] action in
             guard let self = self else { return }
             self.delegate?.didTapEditButton(on: self)
-        }
-
-        let pinAction = UIAction(title: "MenuPin".localized, image: UIImage(named: "bookmark")) { [weak self] action in
-            guard let self = self else { return }
-            self.delegate?.didTapPinButton(on: self)
         }
 
         let deleteAction = UIAction(title: "MenuDelete".localized, image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in

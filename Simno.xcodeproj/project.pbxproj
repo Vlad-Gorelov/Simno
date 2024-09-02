@@ -108,8 +108,8 @@
 			children = (
 				8B1439972C54FC1700B7C6FF /* MainViewController.swift */,
 				8BCE99C42C551779007AD8D6 /* CreateNoteViewController.swift */,
-				8BCE99C02C550BAD007AD8D6 /* NoteCollectionViewCell.swift */,
 				8BCE99C22C550BE1007AD8D6 /* NoteCollectionViewController.swift */,
+				8BCE99C02C550BAD007AD8D6 /* NoteCollectionViewCell.swift */,
 				8B9ABD042C7F023100F83690 /* Alert */,
 			);
 			path = Scenes;
