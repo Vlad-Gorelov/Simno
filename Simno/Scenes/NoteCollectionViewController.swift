@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-final class NoteCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, NoteCollectionViewCellDelegate {
+class NoteCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, NoteCollectionViewCellDelegate {
 
     var notes: [Note] = []
     var filteredNotes: [Note] = []
@@ -92,7 +92,6 @@ final class NoteCollectionViewController: UIViewController, UICollectionViewData
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
 
-        // Снимаем закрепление с других заметок
         if note.isPinned {
             note.isPinned = false
         } else {
@@ -106,7 +105,7 @@ final class NoteCollectionViewController: UIViewController, UICollectionViewData
             print("Failed to update pin status: \(error.localizedDescription)")
         }
 
-        fetchNotes() // Обновляем коллекцию
+        fetchNotes()
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -154,7 +153,8 @@ final class NoteCollectionViewController: UIViewController, UICollectionViewData
 
                 do {
                     let savedNotes = try context.fetch(fetchRequest)
-                    context.delete(savedNotes[indexPath.row])
+                    let noteToDelete = savedNotes[indexPath.row]
+                    context.delete(noteToDelete)
                     try context.save()
 
                     self.notes.remove(at: indexPath.row)
@@ -162,6 +162,8 @@ final class NoteCollectionViewController: UIViewController, UICollectionViewData
                     self.collectionView.deleteItems(at: [indexPath])
 
                     (self.parent as? MainViewController)?.updateEmptyTextLabelVisibility()
+
+                    self.fetchNotes()
 
                 } catch {
                     print("Failed to delete note: \(error.localizedDescription)")

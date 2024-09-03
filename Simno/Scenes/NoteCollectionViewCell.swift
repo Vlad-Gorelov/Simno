@@ -40,6 +40,14 @@ class NoteCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        titleLabel.text = nil
+        descriptionLabel.text = nil
+        dateLabel.text = nil
+        pinIcon.isHidden = true
+    }
+
     private func setupViews() {
         contentView.backgroundColor = .snBackgroundCell
         contentView.layer.cornerRadius = 10
@@ -110,16 +118,14 @@ class NoteCollectionViewCell: UICollectionViewCell {
         ])
     }
 
-    // Обновление отображения иконки канцелярской кнопки
     func setPinned(_ isPinned: Bool) {
         pinIcon.isHidden = !isPinned
-        setupMenu() // Обновляем меню в зависимости от текущего состояния закрепления
+        setupMenu()
     }
 
-    // Обновляем меню с учетом закрепления/открепления
     private func setupMenu() {
         let pinTitle = pinIcon.isHidden ? "MenuPin".localized : "MenuUnpin".localized
-        let pinImage = pinIcon.isHidden ? UIImage(named: "bookmark") : UIImage(named: "bookmark.slash")
+        let pinImage = pinIcon.isHidden ? UIImage(named: "pin") : UIImage(named: "pin")
 
         let pinAction = UIAction(title: pinTitle, image: pinImage) { [weak self] action in
             guard let self = self else { return }
