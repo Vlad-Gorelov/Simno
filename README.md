@@ -26,23 +26,7 @@ Simno — это простое и удобное приложение для с
 
 ## Скриншоты
 
-### Главный экран
-
-<p align="left">
-  <img src="https://s564vla.storage.yandex.net/rdisk/129b64e763a28898748a2946d93806f41e9ef81fa8778a5d2b6162950078237f/66dcd3a6/6ny8nwG9wtsf3a-tiQ4pgmsa7NmuUuyKmutSB4r9LWGrhKKg0pRw7XAnL4Rn9-KbdYnIq74ZqyZJWB4oZAFr7g==?uid=140614600&filename=%D0%93%D0%BB%D0%B0%D0%B2%D0%BD%D1%8B%D0%B8%CC%86%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD.png&disposition=inline&hash=&limit=0&content_type=image%2Fpng&owner_uid=140614600&fsize=210387&hid=f2c5e5e1b4bc06d43a7e26a161152603&media_type=image&tknv=v2&etag=ed450b11ccf3d809a8f4188e8cda249e&ts=6218f0c7fb580&s=89f065df93f020e51551a0ff830b5600576e3ae738b2a022fc155a0546700bef&pb=U2FsdGVkX1_-m2Rid5MmoxcHO2i8nVR5pRHwMegTNN87OV6M7p4PCPmKDAfzimJkP61Vn-Fvqv1Dwt8T7Gp5h8ulXHgdQMbFWaYgS9j6ykE" alt="Главный экран" width="600"/>
-</p>
-
-### Создание заметки
-
-<p align="left">
-  <img src="https://s1048sas.storage.yandex.net/rdisk/34f904ec91e82af4ca2c2d217fa32c248274446ae9e33b9976f195094f10fc57/66dcd3ef/6ny8nwG9wtsf3a-tiQ4pgp4rR_IB2gx4xxffweaaZcCNh5mW3FSr4ZLkQ1MuKFaBDoqcqZVMIcETl8II9idfXA==?uid=140614600&filename=%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%B7%D0%B0%D0%BC%D0%B5%D1%82%D0%BA%D0%B8.png&disposition=inline&hash=&limit=0&content_type=image%2Fpng&owner_uid=140614600&fsize=166488&hid=24998d62a3973eea8817bcb07989f81d&media_type=image&tknv=v2&etag=9b80fdd9e822a5180ff9c9de9a4e8c6d&ts=6218f10d999c0&s=49fff44e33c44ee69279c7350f731de4b5613278dff68e0ab0b1e624848fb104&pb=U2FsdGVkX18EZya8OGq15FmyxYsnEB_X7N2mMv9XY9_XNMG0FTsuFZLgR6I7aYtms3pUiLZF3zGYHqvMEgbg6DwTjFxuosvmuAGPwZqr7jg" alt="Создание заметки" width="600"/>
-</p>
-
-### Поиск по записям
-
-<p align="left">
-  <img src="https://s15klg.storage.yandex.net/rdisk/797ea5cbb7e6d67a7e457c58647f50c2e42d9c99caab51ff1b128e4aef97e278/66dcd419/6ny8nwG9wtsf3a-tiQ4pgrW8BF4XddbkaB8n0dT5WFdAWoFijMPNHEmxmdSq319c3Gf61D2LrCNMN4KMOTXh7w==?uid=140614600&filename=%D0%9F%D0%BE%D0%B8%D1%81%D0%BA.png&disposition=inline&hash=&limit=0&content_type=image%2Fpng&owner_uid=140614600&fsize=212399&hid=eb607d434981743681dc7e8477fc248b&media_type=image&tknv=v2&etag=347fe292186a8190fb6187b3e2aee98c&ts=6218f135a7840&s=dd3b6a98b77a2bfa573bbaac5793c6523aed91f7f42dc326d4221600cbe85d64&pb=U2FsdGVkX18XzQgSXwbCY-yCAU8GuvsrGPLSmHanHo-TeSC3bmbaKtFZvfD4a96mxoYVyf58Haou2HSKhnT7zIoy6el_TYZRxIshvbXjvUI" alt="Поиск по записям" width="600"/>
-</p>
+<img src="https://github.com/Vlad-Gorelov/Vlad-Gorelov/raw/main/Simno%20Screens.png" alt="Screenshot" style="pointer-events: none;" />
 
  ## 📫 Связаться со мной
 > [![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue)](https://www.linkedin.com/in/gorelov-vlad/)
